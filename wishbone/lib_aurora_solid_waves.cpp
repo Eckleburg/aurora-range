@@ -3,14 +3,14 @@
 #include <stdint.h>
 #include <Adafruit_NeoPixel.h>
 
-const int animBufferSize = 60;
+const int animBufferSize = 256;
 Color animBuffer[animBufferSize];
 int animPos = 0;
-int layerSpacing = 5;
+int layerSpacing = 8;
 int numLayers;
 
 bool splitMode = false;
-bool animDirection = true;
+bool animDirection = false;
 
 Color black = {0, 0, 0};
 Color red = {255, 0, 0};
@@ -33,7 +33,7 @@ void initialize(uint8_t brightness, int inputNumLayers) {
     assignLayer(l, black);
     layers[l].show();
   }
-  
+
   // Set animBuffer to all black
   for (int p = 0; p < animBufferSize; p++) {
     animBuffer[p] = black;
@@ -42,32 +42,42 @@ void initialize(uint8_t brightness, int inputNumLayers) {
 
 void test() {
   assignLayer(5, red);
-//  layers[5].setPixelColor(0, 255, 0, 0);
-//  layers[0].show();
-//  layers[5].show();
+  //  layers[5].setPixelColor(0, 255, 0, 0);
+  //  layers[0].show();
+  //  layers[5].show();
   showAll();
 }
 
 void runAuroraRange(Wave * wavesPntr) {
   int numWaves = wavesPntr->numWaves;
 
-  for(int waveCntr = 0; waveCntr < numWaves; waveCntr++) {
+  for (int waveCntr = 0; waveCntr < numWaves; waveCntr++) {
     displayWave(*wavesPntr);
     wavesPntr++;
   }
 }
 
 void displayWave(Wave wave) {
-//  if (wave.reverse) {
-//    animDirection = !animDirection;
-//    // recalc position
-//  }
-//  if (wave.speed > 0) {
-//    newSpeed(wave);
-//  }
+    if (wave.reverse) {
+      animPos = animDirection
+                ? animPos - (numLayers - 1) * layerSpacing
+                : animPos + (numLayers - 1) * layerSpacing;
+      if (animPos < 0) {
+        animPos += animBufferSize;
+      } else if (animPos > animBufferSize - 1) {
+        animPos -= animBufferSize;
+      }
+      animDirection = !animDirection;
+//      Serial.println("reverse");
+    }
+  if (wave.speed > 0) {
+    newSpeed(wave);
+  }
 
   Color prevColor = animBuffer[animPos];
   Slopes slopes = calcSlopes(prevColor, wave.color, wave.width);
+
+  int animStartPos = animPos;
 
   // 1-indexed because otherwise the first step would be the same as prevColor.
   for (int waveStep = 1; waveStep <= wave.width; waveStep++) {
@@ -79,28 +89,36 @@ void displayWave(Wave wave) {
     }
 
     animBuffer[animPos] = calcNextFadeColor(prevColor, slopes, waveStep);
+  }
+  animPos = animStartPos;
 
+  for (int waveStep = 1; waveStep <= wave.width; waveStep++) {
+    animPos = animDirection ? animPos + 1 : animPos - 1;
+    if (animPos < 0) {
+      animPos += animBufferSize;
+    } else if (animPos > animBufferSize - 1) {
+      animPos -= animBufferSize;
+    }
+//    Serial.print("animPos: ");
+//    Serial.println(animPos);
 //    Serial.print("[");
-    
     for (int layerCntr = 0; layerCntr < numLayers; layerCntr++) {
       int thisLayerPos = animDirection
-          ? (animPos - layerCntr * layerSpacing)
-          : (animPos + layerCntr * layerSpacing);
+                         ? (animPos - (numLayers - layerCntr - 1) * layerSpacing)
+                         : (animPos + layerCntr * layerSpacing);
       if (thisLayerPos < 0) {
         thisLayerPos += animBufferSize;
       } else if (thisLayerPos > animBufferSize - 1) {
         thisLayerPos -= animBufferSize;
       }
-//      Serial.print(thisLayerPos);
-//      Serial.print(": ");
-//      Serial.print(animBuffer[thisLayerPos].r);
-//      Serial.print(", ");
-      
+//            Serial.print(thisLayerPos);
+//            Serial.print(", ");
+
       assignLayer(layerCntr, animBuffer[thisLayerPos]);
     }
-//    Serial.println("]");
+//        Serial.println("]");
 
-    showAll();
+    //    showAll();
   }
 }
 
@@ -112,10 +130,10 @@ void newSpeed (Wave wave) {
 }
 
 void assignLayer(int layer, Color color) {
-//  for (int pixel = 0; pixel < layers[layer].numPixels(); pixel++) {
-  for (int pixel = 0; pixel < 100; pixel++) {
+  for (int pixel = 0; pixel < layers[layer].numPixels(); pixel++) {
     layers[layer].setPixelColor(pixel, color.r, color.g, color.b);
   }
+  layers[layer].show();
 }
 
 void showAll() {
