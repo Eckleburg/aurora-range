@@ -13,11 +13,12 @@ struct Wave {
   Color color;
   int width;
   bool reverse;
-  int speed;
+  int spacing;
   int numWaves;
 };
 
-struct Slopes {
+struct Fade {
+  Color prevColor;
   float rSlope;
   float gSlope;
   float bSlope;

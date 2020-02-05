@@ -24,7 +24,7 @@ Adafruit_NeoPixel layers[numLayers] =
 void setup() {
   int brightness = 20;
   initialize(brightness, numLayers);
-
+//  runAuroraRange(getPattern2());
 //  Serial.begin(9600);
 }
 
@@ -40,10 +40,15 @@ Wave * getPattern1() {
     // Designated initializer only works if parameters are in correct order,
     // so it's necessary to explicitly initialize reverse when initializing
     // speed.
-    {.color = red, .width = width},
-    //    {.color = black, .width = 0},
     {.color = green, .width = width},
-    {.color =  blue, .width = width, .reverse = 1, .speed = 1},
+    //    {.color = black, .width = 0},
+    {.color = green, .width = 10},
+    {.color = blue, .width = 10},
+    {.color = red, .width = 10},
+    {.color = blue, .width = 10},
+    {.color = green, .width = 10},
+    {.color =  green, .width = width},
+    {.color = green, .width = width, .reverse = true}
   };
   waves[0].numWaves = sizeof(waves) / sizeof(waves[0]);
   return waves;
@@ -51,7 +56,7 @@ Wave * getPattern1() {
 
 Wave * getPattern2() {
   static Wave waves[] = {
-    {.color = black, .width = 30, .reverse = 0, .speed = 1},
+    {.color = black, .width = 30, .reverse = 0, .spacing = 1},
   };
   waves[0].numWaves = sizeof(waves) / sizeof(waves[0]);
   return waves;
