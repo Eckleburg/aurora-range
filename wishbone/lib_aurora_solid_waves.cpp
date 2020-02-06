@@ -6,7 +6,6 @@ const int animBufferSize = 256;
 Color animBuffer[animBufferSize];
 int animPos = 0;
 int layerSpacing = 8;
-int numLayers;
 bool splitMode = false;
 bool animDirection = false;
 
@@ -19,8 +18,10 @@ int correctPosition(int position);
 Color calcNextFadeColor(Fade fade, int waveStep);
 Fade calcFade(Color prevColor, Color nextColor, int width);
 
-void initialize(uint8_t brightness, int inputNumLayers) {
-  numLayers = inputNumLayers;
+// Initialize the range, get the leds ready to display. Note that numLayers
+// and layers[] are both external variables, they should be defined in your
+// range's code.
+void initialize(uint8_t brightness) {
   for (int l = 0; l < numLayers; l++) {
     layers[l].begin();
     layers[l].setBrightness(brightness);
@@ -48,6 +49,7 @@ void displayWave(Wave wave) {
   }
   if (wave.spacing > 0) {
     newSpacing(wave);
+    return;
   }
 
   Color prevColor = animBuffer[animPos];
@@ -65,7 +67,6 @@ void displayWave(Wave wave) {
   for (int waveStep = 1; waveStep <= wave.width; waveStep++) {
     animPos = animDirection ? animPos + 1 : animPos - 1;
     animPos = correctPosition(animPos);
-    
     for (int layerCntr = 0; layerCntr < numLayers; layerCntr++) {
       int thisLayerPos = animDirection
                          ? (animPos - (numLayers - layerCntr - 1) * layerSpacing)
@@ -109,7 +110,7 @@ void reverse() {
 int correctPosition(int position) {
   if (position < 0) {
     position += animBufferSize;
-  } else if (position > animBufferSize - 1) {
+  } else if (position >= animBufferSize) {
     position -= animBufferSize;
   }
   return position;
@@ -133,7 +134,15 @@ Fade calcFade(Color prevColor, Color nextColor, int width) {
 }
 
 // Color definitions
+// Should probably implement gamma correction before adding more
 Color black = {0, 0, 0};
 Color red = {255, 0, 0};
 Color green = {0, 255, 0};
 Color blue = {0, 0, 255};
+Color maroon = {128, 0, 0};
+Color firebrick = {178, 34, 34};
+Color orangeRed = {255, 69, 0};
+Color gold = {255, 200, 0};
+Color yellow = {255, 255, 0};
+Color yellowGreen = {154, 205, 0};
+Color darkGreen = {0, 100, 0};

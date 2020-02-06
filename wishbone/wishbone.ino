@@ -23,15 +23,13 @@ Adafruit_NeoPixel layers[numLayers] =
 
 void setup() {
   int brightness = 20;
-  initialize(brightness, numLayers);
+  initialize(brightness);
 //  runAuroraRange(getPattern2());
 //  Serial.begin(9600);
 }
 
 void loop() {
-  //  runAuroraRange(getPattern2());
-    runAuroraRange(getPattern1());
-  //  runAuroraRange(getPattern1());
+    runAuroraRange(getPattern3());
 }
 
 Wave * getPattern1() {
@@ -65,6 +63,9 @@ Wave * getPattern2() {
 Wave * getPattern3() {
   static Wave waves[] = {
     {.color = blue, .width = 60},
+    {.color = darkGreen, .width = 60},
+    {.color = blue, .width = 60},
+    {.color = yellowGreen, .width = 60},
   };
   waves[0].numWaves = sizeof(waves) / sizeof(waves[0]);
   return waves;

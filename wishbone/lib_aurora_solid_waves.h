@@ -24,14 +24,22 @@ struct Fade {
   float bSlope;
 };
 
-void initialize(uint8_t brightness, int numLayers);
+void initialize(uint8_t brightness);
 void runAuroraRange(Wave waves[]);
 
 void test();
 
 extern Adafruit_NeoPixel layers[];
+extern const int numLayers;
 
 extern Color red;
 extern Color black;
 extern Color green;
 extern Color blue;
+extern Color maroon;
+extern Color firebrick;
+extern Color orangeRed;
+extern Color gold;
+extern Color yellow;
+extern Color yellowGreen;
+extern Color darkGreen;
