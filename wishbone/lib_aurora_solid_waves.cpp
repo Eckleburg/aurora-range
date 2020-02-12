@@ -1,6 +1,7 @@
 /* lib_aurora_solid_waves.c */
 #include "lib_aurora_solid_waves.h"
 #include <Adafruit_NeoPixel.h>
+#include <math.h>
 
 const int animBufferSize = 256;
 Color animBuffer[animBufferSize];
@@ -11,7 +12,7 @@ bool animDirection = false;
 
 /* Forward declaration of internal library functions */
 void displayWave(Wave wave);
-void newSpacing(Wave wave);
+void displaySolid(Wave wave);
 void assignLayer(int layer, Color color);
 void reverse();
 int correctPosition(int position);
@@ -47,8 +48,15 @@ void displayWave(Wave wave) {
   if (wave.reverse) {
       reverse();
   }
-  if (wave.spacing > 0) {
-    newSpacing(wave);
+  
+  if (wave.spacing > 0 || wave.switchSplit) {
+    displaySolid(wave);
+    if (wave.spacing > 0) {
+      layerSpacing = wave.spacing;
+    }
+    if (wave.switchSplit) {
+      splitMode = !splitMode;
+    }
     return;
   }
 
@@ -68,22 +76,23 @@ void displayWave(Wave wave) {
     animPos = animDirection ? animPos + 1 : animPos - 1;
     animPos = correctPosition(animPos);
     for (int layerCntr = 0; layerCntr < numLayers; layerCntr++) {
+      int layerNum = splitMode
+                     ? abs(numLayers / 2 - layerCntr)
+                     : layerCntr;
       int thisLayerPos = animDirection
-                         ? (animPos - (numLayers - layerCntr - 1) * layerSpacing)
-                         : (animPos + layerCntr * layerSpacing);
+                         ? (animPos - (numLayers - layerNum - 1) * layerSpacing)
+                         : (animPos + layerNum * layerSpacing);
       thisLayerPos = correctPosition(thisLayerPos);
       assignLayer(layerCntr, animBuffer[thisLayerPos]);
     }
   }
 }
 
-// Display two waves in order to get the whole range to one solid color, then
-// set the new spacing.
-void newSpacing (Wave wave) {
+// Display two waves in order to get the whole range to one solid color.
+void displaySolid (Wave wave) {
   Wave newSpacingWave = {.color = wave.color, .width = numLayers * layerSpacing};
   displayWave(newSpacingWave);
-  displayWave(newSpacingWave);
-  layerSpacing = wave.spacing;
+//  displayWave(newSpacingWave);
 }
 
 void assignLayer(int layer, Color color) {

@@ -22,14 +22,14 @@ Adafruit_NeoPixel layers[numLayers] =
 {layer0, layer1, layer2, layer3, layer4, layer5, layer6, layer7, layer8, layer9, layer10};
 
 void setup() {
-  int brightness = 20;
+  int brightness = 30;
   initialize(brightness);
-//  runAuroraRange(getPattern2());
+  runAuroraRange(getPattern2());
 //  Serial.begin(9600);
 }
 
 void loop() {
-    runAuroraRange(getPattern3());
+    runAuroraRange(getPattern1());
 }
 
 Wave * getPattern1() {
@@ -44,9 +44,9 @@ Wave * getPattern1() {
     {.color = blue, .width = 10},
     {.color = red, .width = 10},
     {.color = blue, .width = 10},
-    {.color = green, .width = 10},
-    {.color =  green, .width = width},
-    {.color = green, .width = width, .reverse = true}
+    {.color = red, .width = 10},
+    {.color =  blue, .width = width},
+    {.color = red, .width = width, .reverse = true, .switchSplit = 1}
   };
   waves[0].numWaves = sizeof(waves) / sizeof(waves[0]);
   return waves;
@@ -54,7 +54,7 @@ Wave * getPattern1() {
 
 Wave * getPattern2() {
   static Wave waves[] = {
-    {.color = black, .width = 30, .reverse = 0, .spacing = 1},
+    {.color = black, .width = 30, .reverse = 0, .switchSplit = 1},
   };
   waves[0].numWaves = sizeof(waves) / sizeof(waves[0]);
   return waves;

@@ -13,6 +13,7 @@ struct Wave {
   Color color;
   int width;
   bool reverse;
+  bool switchSplit;
   int spacing;
   int numWaves;
 };
