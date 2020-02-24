@@ -2,6 +2,7 @@
 #include "lib_aurora_solid_waves.h"
 #include <Adafruit_NeoPixel.h>
 #include <math.h>
+#include <stdint.h>
 
 const int animBufferSize = 256;
 Color animBuffer[animBufferSize];
@@ -9,6 +10,7 @@ int animPos = 0;
 int layerSpacing = 8;
 bool splitMode = false;
 bool animDirection = false;
+bool gamma = false;
 
 /* Forward declaration of internal library functions */
 void displayWave(Wave wave);
@@ -18,6 +20,8 @@ void reverse();
 int correctPosition(int position);
 Color calcNextFadeColor(Fade fade, int waveStep);
 Fade calcFade(Color prevColor, Color nextColor, int width);
+Color gammaAdjust(Color inputColor);
+extern const uint8_t gamma8[];
 
 // Initialize the range, get the leds ready to display. Note that numLayers
 // and layers[] are both external variables, they should be defined in your
@@ -60,8 +64,15 @@ void displayWave(Wave wave) {
     return;
   }
 
+  if (wave.switchGamma) {
+    gamma = !gamma;
+  }
+
   Color prevColor = animBuffer[animPos];
-  Fade fade = calcFade(prevColor, wave.color, wave.width);
+  Color nextColor = gamma
+                    ? gammaAdjust(wave.color)
+                    : wave.color;
+  Fade fade = calcFade(prevColor, nextColor, wave.width);
   int wavePos = animPos;
 
   // Calculate every color in the fade before displaying, results in smoother display
@@ -143,7 +154,6 @@ Fade calcFade(Color prevColor, Color nextColor, int width) {
 }
 
 // Color definitions
-// Should probably implement gamma correction before adding more
 Color black = {0, 0, 0};
 Color red = {255, 0, 0};
 Color green = {0, 255, 0};
@@ -155,3 +165,38 @@ Color gold = {255, 200, 0};
 Color yellow = {255, 255, 0};
 Color yellowGreen = {154, 205, 0};
 Color darkGreen = {0, 100, 0};
+Color cyan = {0, 255, 255};
+Color turquoise = {64, 224, 208};
+Color midnightBlue = {25, 25, 112};
+Color royalBlue {65, 105, 225};
+Color purple = {145, 0, 255};
+Color fuchsia = {255, 0, 255};
+Color pink = {255, 20, 147};
+
+
+Color gammaAdjust(Color inputColor) {
+  Color adjustedColor = {
+    pgm_read_byte(&gamma8[inputColor.r]),
+    pgm_read_byte(&gamma8[inputColor.g]),
+    pgm_read_byte(&gamma8[inputColor.b])
+  };
+  return adjustedColor;
+}
+
+const uint8_t PROGMEM gamma8[] = {
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,
+    1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  2,  2,
+    2,  3,  3,  3,  3,  3,  3,  3,  4,  4,  4,  4,  4,  5,  5,  5,
+    5,  6,  6,  6,  6,  7,  7,  7,  7,  8,  8,  8,  9,  9,  9, 10,
+   10, 10, 11, 11, 11, 12, 12, 13, 13, 13, 14, 14, 15, 15, 16, 16,
+   17, 17, 18, 18, 19, 19, 20, 20, 21, 21, 22, 22, 23, 24, 24, 25,
+   25, 26, 27, 27, 28, 29, 29, 30, 31, 32, 32, 33, 34, 35, 35, 36,
+   37, 38, 39, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 50,
+   51, 52, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 66, 67, 68,
+   69, 70, 72, 73, 74, 75, 77, 78, 79, 81, 82, 83, 85, 86, 87, 89,
+   90, 92, 93, 95, 96, 98, 99,101,102,104,105,107,109,110,112,114,
+  115,117,119,120,122,124,126,127,129,131,133,135,137,138,140,142,
+  144,146,148,150,152,154,156,158,160,162,164,167,169,171,173,175,
+  177,180,182,184,186,189,191,193,196,198,200,203,205,208,210,213,
+  215,218,220,223,225,228,231,233,236,239,241,244,247,249,252,255 };

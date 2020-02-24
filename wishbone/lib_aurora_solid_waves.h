@@ -14,6 +14,7 @@ struct Wave {
   int width;
   bool reverse;
   bool switchSplit;
+  bool switchGamma;
   int spacing;
   int numWaves;
 };
@@ -44,3 +45,10 @@ extern Color gold;
 extern Color yellow;
 extern Color yellowGreen;
 extern Color darkGreen;
+extern Color cyan;
+extern Color turquoise;
+extern Color midnightBlue;
+extern Color royalBlue;
+extern Color purple;
+extern Color fuchsia;
+extern Color pink;
