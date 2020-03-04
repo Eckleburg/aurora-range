@@ -4,19 +4,17 @@
 #include <math.h>
 #include <stdint.h>
 
-const int animBufferSize = 256;
+const int animBufferSize = 300;
 Color animBuffer[animBufferSize];
 int animPos = 0;
-int layerSpacing = 8;
+int layerSpacing = 20;
 bool splitMode = false;
 bool animDirection = false;
 bool gamma = false;
 
 /* Forward declaration of internal library functions */
-void displayWave(Wave wave);
-void displaySolid(Wave wave);
+void displaySolid(Color color);
 void assignLayer(int layer, Color color);
-void reverse();
 int correctPosition(int position);
 Color calcNextFadeColor(Fade fade, int waveStep);
 Fade calcFade(Color prevColor, Color nextColor, int width);
@@ -40,50 +38,23 @@ void initialize(uint8_t brightness) {
   }
 }
 
-void runAuroraRange(Wave * wavesPntr) {
-  int numWaves = wavesPntr->numWaves;
-  for (int waveCntr = 0; waveCntr < numWaves; waveCntr++) {
-    displayWave(*wavesPntr);
-    wavesPntr++;
-  }
-}
-
-void displayWave(Wave wave) {
-  if (wave.reverse) {
-      reverse();
-  }
-  
-  if (wave.spacing > 0 || wave.switchSplit) {
-    displaySolid(wave);
-    if (wave.spacing > 0) {
-      layerSpacing = wave.spacing;
-    }
-    if (wave.switchSplit) {
-      splitMode = !splitMode;
-    }
-    return;
-  }
-
-  if (wave.switchGamma) {
-    gamma = !gamma;
-  }
-
+void displayWave(Color color, int width) {
   Color prevColor = animBuffer[animPos];
   Color nextColor = gamma
-                    ? gammaAdjust(wave.color)
-                    : wave.color;
-  Fade fade = calcFade(prevColor, nextColor, wave.width);
+                    ? gammaAdjust(color)
+                    : color;
+  Fade fade = calcFade(prevColor, nextColor, width);
   int wavePos = animPos;
 
   // Calculate every color in the fade before displaying, results in smoother display
   // 1-indexed because otherwise the first step would be the same as prevColor.
-  for (int waveStep = 1; waveStep <= wave.width; waveStep++) {
+  for (int waveStep = 1; waveStep <= width; waveStep++) {
     wavePos = animDirection ? wavePos + 1 : wavePos - 1;
     wavePos = correctPosition(wavePos);
     animBuffer[wavePos] = calcNextFadeColor(fade, waveStep);
   }
 
-  for (int waveStep = 1; waveStep <= wave.width; waveStep++) {
+  for (int waveStep = 1; waveStep <= width; waveStep++) {
     animPos = animDirection ? animPos + 1 : animPos - 1;
     animPos = correctPosition(animPos);
     for (int layerCntr = 0; layerCntr < numLayers; layerCntr++) {
@@ -99,11 +70,10 @@ void displayWave(Wave wave) {
   }
 }
 
+
 // Display two waves in order to get the whole range to one solid color.
-void displaySolid (Wave wave) {
-  Wave newSpacingWave = {.color = wave.color, .width = numLayers * layerSpacing};
-  displayWave(newSpacingWave);
-//  displayWave(newSpacingWave);
+void displaySolid (Color color) {
+  displayWave(color, numLayers * layerSpacing);
 }
 
 void assignLayer(int layer, Color color) {
@@ -114,6 +84,7 @@ void assignLayer(int layer, Color color) {
   // Progressively showing each layer results in smoother transitions than
   // showing all layers at once.
   layers[layer].show();
+  delay(4);
 }
 
 // Recalculate animPos to be equal to the position of the layer currently
@@ -124,6 +95,20 @@ void reverse() {
             : animPos + (numLayers - 1) * layerSpacing;
   animPos = correctPosition(animPos);
   animDirection = !animDirection;
+}
+
+void setGamma(boolean b) {
+  gamma = b;
+}
+
+void setSplit(Color color, boolean b) {
+  displaySolid(color);
+  splitMode = b;
+}
+
+void newSpacing(Color color, int spacing) {
+  displaySolid(color);
+  layerSpacing = spacing;
 }
 
 // Ensure that a given position lies within [0, animBufferSize)

@@ -27,7 +27,12 @@ struct Fade {
 };
 
 void initialize(uint8_t brightness);
-void runAuroraRange(Wave waves[]);
+void displayWave(Color color, int width);
+void reverse();
+void setGamma(boolean b);
+void setSplit(Color color, boolean b);
+void newSpacing(Color color, int spacing);
+
 
 void test();
 
