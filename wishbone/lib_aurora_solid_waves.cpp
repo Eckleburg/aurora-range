@@ -8,6 +8,7 @@ const int animBufferSize = 300;
 Color animBuffer[animBufferSize];
 int animPos = 0;
 int layerSpacing = 20;
+int animDelay = 4;
 bool splitMode = false;
 bool animDirection = false;
 bool gamma = false;
@@ -70,10 +71,36 @@ void displayWave(Color color, int width) {
   }
 }
 
+// Transitions the full range to the new color, assumes that
+// the range is already displaying one solid color
+void fullTransition(Color color, int width) {
+  Color prevColor = animBuffer[animPos];
+  Color nextColor = gamma
+                    ? gammaAdjust(color)
+                    : color;
+  Fade fade = calcFade(prevColor, nextColor, width);
+  int wavePos = animPos;
+
+  for (int waveStep = 1; waveStep <= width; waveStep++) {
+    Color thisNextColor = calcNextFadeColor(fade, waveStep);
+    for (int layerCntr = 0; layerCntr < numLayers; layerCntr++) {
+      assignLayer(layerCntr, thisNextColor);      
+    }
+  }
+
+  // Set all intermediate anim buffer positions to final color
+  int animWidth = numLayers * layerSpacing;
+  for (int animStepCntr = 0; animStepCntr < animWidth; animStepCntr++) {
+    animPos = animDirection ? animPos + 1 : animPos - 1;
+    animPos = correctPosition(animPos);
+    animBuffer[animPos] = nextColor;
+  }
+}
 
 // Display two waves in order to get the whole range to one solid color.
-void displaySolid (Color color) {
-  displayWave(color, numLayers * layerSpacing);
+void displaySolid (Color color, int spacing) {
+  displayWave(color, numLayers * spacing);
+  displayWave(color, numLayers * spacing);
 }
 
 void assignLayer(int layer, Color color) {
@@ -84,7 +111,7 @@ void assignLayer(int layer, Color color) {
   // Progressively showing each layer results in smoother transitions than
   // showing all layers at once.
   layers[layer].show();
-  delay(4);
+  delay(animDelay);
 }
 
 // Recalculate animPos to be equal to the position of the layer currently
@@ -106,9 +133,24 @@ void setSplit(Color color, boolean b) {
   splitMode = b;
 }
 
-void newSpacing(Color color, int spacing) {
-  displaySolid(color);
+void setSpacing(Color color, int spacing) {
+  // Use the greater of the two to ensure the buffer gets fully colored
+  if (spacing > layerSpacing) {
+    displaySolid(color, spacing);
+  } else {
+    displaySolid(color, layerSpacing);
+  }
   layerSpacing = spacing;
+}
+
+void setSplitAndSpacing(Color color, int spacing, boolean b) {
+  displaySolid(color);
+  splitMode = b;
+  layerSpacing = spacing;
+}
+
+void setDelay(int newDelay) {
+  animDelay = newDelay;
 }
 
 // Ensure that a given position lies within [0, animBufferSize)
@@ -145,7 +187,7 @@ Color green = {0, 255, 0};
 Color blue = {0, 0, 255};
 Color maroon = {128, 0, 0};
 Color firebrick = {178, 34, 34};
-Color orangeRed = {255, 69, 0};
+Color orange = {255, 69, 0};
 Color gold = {255, 200, 0};
 Color yellow = {255, 255, 0};
 Color yellowGreen = {154, 205, 0};
@@ -157,7 +199,8 @@ Color royalBlue {65, 105, 225};
 Color purple = {145, 0, 255};
 Color fuchsia = {255, 0, 255};
 Color pink = {255, 20, 147};
-
+Color white = {255, 255, 255};
+Color darkWhite = {150, 150, 150};
 
 Color gammaAdjust(Color inputColor) {
   Color adjustedColor = {

@@ -28,11 +28,13 @@ struct Fade {
 
 void initialize(uint8_t brightness);
 void displayWave(Color color, int width);
+void fullTransition(Color color, int width);
 void reverse();
 void setGamma(boolean b);
 void setSplit(Color color, boolean b);
-void newSpacing(Color color, int spacing);
-
+void setSpacing(Color color, int spacing);
+void setSplitAndSpacing(Color color, int spacing, boolean b);
+void setDelay(int newDelay);
 
 void test();
 
@@ -45,7 +47,7 @@ extern Color green;
 extern Color blue;
 extern Color maroon;
 extern Color firebrick;
-extern Color orangeRed;
+extern Color orange;
 extern Color gold;
 extern Color yellow;
 extern Color yellowGreen;
@@ -57,3 +59,5 @@ extern Color royalBlue;
 extern Color purple;
 extern Color fuchsia;
 extern Color pink;
+extern Color white;
+extern Color darkWhite;
