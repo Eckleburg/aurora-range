@@ -15,6 +15,17 @@ Adafruit_NeoPixel layer0 = Adafruit_NeoPixel(48, 11);
 Adafruit_NeoPixel layers[numLayers] =
   {layer0, layer1, layer2, layer3, layer4, layer5};
 
+// Function declarations
+void purpleIntro(Color spaceColor);
+void blueDarkWhite();
+void blueDarkWhite();
+void blueDarkWhite();
+void rainbow();
+void yellowAndRed();
+void blueAndFuchsia();
+void cyanAndPink(Color spaceColor);
+
+
 void setup() {
   int brightness = 80;
   initialize(brightness);
@@ -22,28 +33,63 @@ void setup() {
 }
 
 void loop() {
-  Color spaceColor = {255, 70, 0};
+  bool shortLoop = false;
+  if (shortLoop) {
+
+  } else {
+    Color spaceColor = {0, 0, 0};
+    
+    purpleIntro(spaceColor);
+    delay(700);
+    
+    setGamma(true);
+    fullTransition(white, 80);
+    setDelay(3);
+    blueDarkWhite();
+    
+    delay(500);
+    fullTransition(yellow, 30);
+    setDelay(2);
+    yellowAndRed();
+    
+    setDelay(1);
+    reverse();
+    rainbow();
+    fullTransition(fuchsia, 80);
+    
+    setSpacing(fuchsia, 20);
+    reverse();
+    setDelay(3);
+    blueAndFuchsia();
   
-  reverse();
+    cyanAndPink(spaceColor);
+  
+    spaceColor = orange;
+    setSpacing(black, 20);
+    setDelay(4);
+  }
+}
+
+void purpleIntro(Color spaceColor) {
+  setDelay(10);
   for (int i = 0; i < 3; i++) {
-    displayWave(red, 100);
+    displayWave(purple, 100);
+    setDelay(4);
     displayWave(spaceColor, 100);
     displayWave(spaceColor, 100);
     delay(3000);
   }
   for (int i = 0; i < 4; i++) {
-    displayWave(red, 40);
+    displayWave(purple, 40);
     displayWave(spaceColor, 40);
     displayWave(spaceColor, 100);
   }
-  setSpacing(red, 10);
-  delay(700);
-  
-  setGamma(true);
-  fullTransition(white, 80);
-  setDelay(3);
-//  for (int i = 0; i < 8; i++) {
-  for (int i = 0; i < 2; i++) {
+  setSpacing(purple, 10);
+}
+
+void blueDarkWhite() {
+  for (int i = 0; i < 8; i++) {
+//  for (int i = 0; i < 1; i++) {
     displayWave(blue, 40);
     displayWave(red, 40);
     displayWave(darkWhite, 80);
@@ -51,26 +97,12 @@ void loop() {
     displayWave(darkWhite, 20);  
     displayWave(blue, 100);
     displayWave(blue, 60);
-  }
-  
-  setSpacing(black, 20);
-  delay(1500);
-  for (int i = 0; i < 10; i++) {
-    for (int j = 0; j < 3; j++) {
-      setDelay(1);
-      displayWave(cyan, 80);
-      displayWave(cyan, 80);
-      displayWave(spaceColor, 40);
-      displayWave(cyan, 40);
-    }
-    setDelay(0);
-    displayWave(fuchsia, 140);
-    displayWave(cyan, 80);
-    reverse();
-  }
-  
-  setDelay(1);
-  reverse();
+    displayWave(blue, 30);
+    displayWave(purple, 90);
+  }  
+}
+
+void rainbow() {
   bool shouldReverse = false;
   for (int i = 0; i < 8; i++) {
 //  for (int i = 0; i < 2; i++) {
@@ -88,11 +120,31 @@ void loop() {
     shouldReverse = !shouldReverse;
   }
   displayWave(red, 150);
-  fullTransition(fuchsia, 80);
-  
-  setSpacing(fuchsia, 20);
-  reverse();
-  setDelay(3);
+}
+
+void yellowAndRed() {
+  for (int i = 0; i < 6; i++) {
+    displayWave(yellow, 40);
+    displayWave(black, 40);
+    displayWave(yellow, 10);
+    displayWave(yellow, 60);
+    displayWave(red, 90);
+    displayWave(yellow, 30);
+    displayWave(yellow, 60);
+    reverse();
+    displayWave(black, 60);
+    displayWave(black, 60);
+    displayWave(black, 60);
+    delay(200);
+    displayWave(red, 10);
+    displayWave(yellow, 40);
+    displayWave(yellow, 60);
+    displayWave(black, 30);
+    displayWave(yellow, 60);
+  }
+}
+
+void blueAndFuchsia() {
   for (int j = 0; j < 2; j++) {
     for (int i = 0; i < 10; i++) {
 //    for (int i = 0; i < 2; i++) {
@@ -112,8 +164,20 @@ void loop() {
     displayWave(blue, 100);
     reverse();
   }
+}
 
-  spaceColor = orange;
-  setSpacing(black, 20);
-  setDelay(4);
+void cyanAndPink(Color spaceColor) {
+  for (int i = 0; i < 10; i++) {
+    for (int j = 0; j < 3; j++) {
+      setDelay(1);
+      displayWave(cyan, 80);
+      displayWave(cyan, 80);
+      displayWave(spaceColor, 40);
+      displayWave(cyan, 40);
+    }
+    setDelay(0);
+    displayWave(fuchsia, 140);
+    displayWave(cyan, 80);
+    reverse();
+  }
 }
