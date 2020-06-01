@@ -24,11 +24,15 @@ void rainbow();
 void yellowAndRed();
 void blueAndFuchsia();
 void cyanAndPink(Color spaceColor);
+void newPattern();
 
+Color spaceColors[2] = {black, white};
+bool spaceColorSelector = false;
 
 void setup() {
   int brightness = 80;
   initialize(brightness);
+  setGamma(true);
 //  Serial.begin(9600);
 }
 
@@ -37,35 +41,50 @@ void loop() {
   if (shortLoop) {
 
   } else {
-    Color spaceColor = {0, 0, 0};
-    
-    purpleIntro(spaceColor);
-    delay(700);
-    
-    setGamma(true);
-    fullTransition(white, 80);
+    Color spaceColor;
+    if (!spaceColorSelector) {
+      spaceColor = spaceColors[0];
+    } else {
+      spaceColor = spaceColors[1];
+    }    
+//    purpleIntro(spaceColor);
+//    bluePurpleSlow();
+//    purpleIntro(spaceColor);
+//    
+//    delay(2000);
+//    fullTransition(white, 80);
+//    setDelay(3);
+//    blueDarkWhite();
+//    
+//    delay(500);
+//    fullTransition(yellow, 30);
+//    setDelay(2);
+//    yellowAndRed();
+//
+//    delay(1500);
+//    setDelay(1);
+//    reverse();
+//    rainbow();
+//    fullTransition(fuchsia, 80);
+//    
+//    setSpacing(fuchsia, 20);
+//    reverse();
+//    setDelay(3);
+//    blueAndFuchsia();
+//
+//    displayWave(black, 120);
+//    displayWave(black, 120);
+//    displayWave(black, 120);
+//    triads();
+//  
+//    cyanAndPink(spaceColor);
+    setSpacing(black, 12);
+    setDelay(4);
+    seaGreenAndOrange();
+
     setDelay(3);
-    blueDarkWhite();
-    
-    delay(500);
-    fullTransition(yellow, 30);
-    setDelay(2);
-    yellowAndRed();
-    
-    setDelay(1);
-    reverse();
     rainbow();
-    fullTransition(fuchsia, 80);
-    
-    setSpacing(fuchsia, 20);
-    reverse();
-    setDelay(3);
-    blueAndFuchsia();
-  
-    cyanAndPink(spaceColor);
-  
-    spaceColor = orange;
-    setSpacing(black, 20);
+    spaceColorSelector = !spaceColorSelector;
     setDelay(4);
   }
 }
@@ -87,6 +106,25 @@ void purpleIntro(Color spaceColor) {
   setSpacing(purple, 10);
 }
 
+void bluePurpleSlow() {
+  for (int i = 0; i < 2; i++) {
+    displayWave(purple, 120);
+    displayWave(blue, 120);
+    displayWave(black, 120);
+    displayWave(black, 120);
+    delay(1500);
+  }
+
+  for (int i = 0; i < 4; i++) {
+    displayWave(purple, 120);
+    displayWave(blue, 40);
+    displayWave(black, 80);
+    displayWave(blue, 120);
+    displayWave(purple, 120);
+    displayWave(black, 120);  
+  }
+}
+
 void blueDarkWhite() {
   for (int i = 0; i < 8; i++) {
 //  for (int i = 0; i < 1; i++) {
@@ -99,21 +137,28 @@ void blueDarkWhite() {
     displayWave(blue, 60);
     displayWave(blue, 30);
     displayWave(purple, 90);
+    reverse();
   }  
 }
 
 void rainbow() {
   bool shouldReverse = false;
-  for (int i = 0; i < 8; i++) {
+  for (int i = 0; i < 12; i++) {
 //  for (int i = 0; i < 2; i++) {
     displayWave(green, 40);
     displayWave(red, 70);
+    reverse();
     displayWave(blue, 20);
     displayWave(green, 50);
     displayWave(red, 40);
     displayWave(green, 10);
     displayWave(blue, 80);
+    reverse();
     displayWave(red, 30);
+    displayWave(blue, 90);
+    displayWave(red, 90);
+    displayWave(green, 90);
+    displayWave(red, 60);
     if (shouldReverse) {
       reverse();
     }
@@ -125,7 +170,7 @@ void rainbow() {
 void yellowAndRed() {
   for (int i = 0; i < 6; i++) {
     displayWave(yellow, 40);
-    displayWave(black, 40);
+    displayWave(black, 70);
     displayWave(yellow, 10);
     displayWave(yellow, 60);
     displayWave(red, 90);
@@ -137,16 +182,25 @@ void yellowAndRed() {
     displayWave(black, 60);
     delay(200);
     displayWave(red, 10);
+    displayWave(yellow, 60);
+    reverse();
+    displayWave(black, 30);
+    displayWave(black, 50);
+    reverse();
+    displayWave(red, 10);
     displayWave(yellow, 40);
     displayWave(yellow, 60);
+    reverse();
     displayWave(black, 30);
+    displayWave(black, 50);
+    reverse();    
     displayWave(yellow, 60);
   }
 }
 
 void blueAndFuchsia() {
   for (int j = 0; j < 2; j++) {
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 4; i++) {
 //    for (int i = 0; i < 2; i++) {
       displayWave(blue, 80);
       displayWave(fuchsia, 80);
@@ -155,7 +209,7 @@ void blueAndFuchsia() {
     displayWave(blue, 80);
     displayWave(blue, 80);
     displayWave(blue, 80);
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 3; i++) {
       displayWave(royalBlue, 100);
       displayWave(purple, 30);
       displayWave(royalBlue, 100);
@@ -164,6 +218,51 @@ void blueAndFuchsia() {
     displayWave(blue, 100);
     reverse();
   }
+}
+
+void triads() {
+  initialize(160);
+
+  for (int j = 0; j < 2; j++) {
+    setSpacing(black, 4);
+    setDelay(4);
+    for (int i = 0; i < 3; i++) {
+      displayWave(triadSalmon, 20);
+      displayWave(triadBlue, 20);
+      displayWave(triadSalmon, 20);
+      displayWave(triadBlue, 20);
+      displayWave(triadSalmon, 20);
+      displayWave(triadBlue, 20);
+      displayWave(triadSalmon, 20);
+      displayWave(triadBlue, 20);
+      displayWave(triadSalmon, 20);
+      displayWave(triadBlue, 20);
+      reverse();
+      displayWave(triadSalmon, 20);
+      displayWave(triadBlue, 20);
+      displayWave(triadSalmon, 20);
+      displayWave(triadBlue, 20);
+      reverse();
+    }
+    setSpacing(triadBlue, 7);
+    setDelay(1);
+    for (int i = 0; i < 3; i++) {
+      displayWave(triadBlue, 120);
+      displayWave(triadSalmon, 120);
+      displayWave(triadGreen, 120);
+      displayWave(black, 120);
+      displayWave(triadGreen, 80);
+      displayWave(triadSalmon, 20);
+      displayWave(triadBlue, 120);
+      displayWave(triadSalmon, 20);
+      displayWave(triadGreen, 100);
+      displayWave(black, 120);
+      reverse();
+    }
+    displayWave(black, 120);
+    displayWave(black, 120);
+  }
+  initialize(80);
 }
 
 void cyanAndPink(Color spaceColor) {
@@ -179,5 +278,30 @@ void cyanAndPink(Color spaceColor) {
     displayWave(fuchsia, 140);
     displayWave(cyan, 80);
     reverse();
+  }
+}
+
+void seaGreenAndOrange() {
+  for (int i = 0; i < 5; i++) {
+    displayWave(seaGreen, 100);
+    displayWave(black, 20);
+    displayWave(orange, 30);
+    displayWave(seaGreen, 30);
+    displayWave(black, 20);
+    displayWave(red, 50);
+    displayWave(red, 30);
+    reverse();
+    displayWave(orange, 60);
+    displayWave(white, 30);
+    displayWave(orange, 60);
+    displayWave(seaGreen, 40);
+    displayWave(red, 60);
+    displayWave(red, 60);
+    reverse();
+    displayWave(seaGreen, 80);
+    displayWave(red, 10);
+    displayWave(seaGreen, 80);
+    displayWave(black, 40);
+    displayWave(orange, 60);
   }
 }

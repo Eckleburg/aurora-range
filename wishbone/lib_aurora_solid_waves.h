@@ -61,3 +61,7 @@ extern Color fuchsia;
 extern Color pink;
 extern Color white;
 extern Color darkWhite;
+extern Color seaGreen;
+extern Color triadBlue;
+extern Color triadSalmon;
+extern Color triadGreen;

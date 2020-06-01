@@ -201,6 +201,10 @@ Color fuchsia = {255, 0, 255};
 Color pink = {255, 20, 147};
 Color white = {255, 255, 255};
 Color darkWhite = {150, 150, 150};
+Color seaGreen = {0, 250, 130};
+Color triadBlue = {70, 114, 138};
+Color triadSalmon = {200, 112, 87};
+Color triadGreen = {72, 90, 50};
 
 Color gammaAdjust(Color inputColor) {
   Color adjustedColor = {
