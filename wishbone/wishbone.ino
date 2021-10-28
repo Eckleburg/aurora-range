@@ -47,37 +47,44 @@ void loop() {
     } else {
       spaceColor = spaceColors[1];
     }    
-//    purpleIntro(spaceColor);
-//    bluePurpleSlow();
-//    purpleIntro(spaceColor);
-//    
-//    delay(2000);
-//    fullTransition(white, 80);
-//    setDelay(3);
-//    blueDarkWhite();
-//    
-//    delay(500);
-//    fullTransition(yellow, 30);
-//    setDelay(2);
-//    yellowAndRed();
-//
-//    delay(1500);
-//    setDelay(1);
-//    reverse();
-//    rainbow();
-//    fullTransition(fuchsia, 80);
-//    
-//    setSpacing(fuchsia, 20);
-//    reverse();
-//    setDelay(3);
+    purpleIntro(spaceColor);
+    bluePurpleSlow();
+    purpleIntro(spaceColor);
+    
+    delay(2000);
+    fullTransition(white, 80);
+    setDelay(3);
+    blueDarkWhite();
+    
+    delay(500);
+    fullTransition(yellow, 30);
+    setDelay(2);
+    yellowAndRed();
+
+    delay(1500);
+    setDelay(1);
+    reverse();
+    rainbow();
+    fullTransition(fuchsia, 80);
+    
+    setSpacing(fuchsia, 20);
+    reverse();
+    setDelay(3);
 //    blueAndFuchsia();
-//
-//    displayWave(black, 120);
-//    displayWave(black, 120);
-//    displayWave(black, 120);
-//    triads();
-//  
-//    cyanAndPink(spaceColor);
+
+    setDelay(0);
+//    blueGreen();
+    
+    reverse();
+    setDelay(1);
+    yellowPurpleTurquoise();
+
+    displayWave(black, 120);
+    displayWave(black, 120);
+    displayWave(black, 120);
+    triads();
+  
+    cyanAndPink(spaceColor);
     setSpacing(black, 12);
     setDelay(4);
     seaGreenAndOrange();
@@ -304,4 +311,73 @@ void seaGreenAndOrange() {
     displayWave(black, 40);
     displayWave(orange, 60);
   }
+}
+
+void blueGreen() {
+  for (int j = 0; j < 3; j++) {
+    displayWave(blue, 120);
+    displayWave(green, 120);
+    displayWave(blue, 120);
+    displayWave(green, 120);
+    displayWave(blue, 120);
+    displayWave(green, 120);
+    reverse();
+    displayWave(blue, 120);
+    displayWave(green, 120);
+    displayWave(blue, 120);
+    displayWave(green, 120);
+    displayWave(blue, 120);
+    displayWave(green, 120);
+    displayWave(blue, 120);
+    displayWave(green, 120);
+    displayWave(black, 60);
+    displayWave(green, 20);
+    displayWave(blue, 120);
+    displayWave(black, 120);
+    displayWave(green, 120);
+    displayWave(blue, 120);
+    displayWave(black, 120);
+    displayWave(green, 120);
+    displayWave(blue, 120);
+    displayWave(black, 120);
+    displayWave(green, 120);
+    displayWave(blue, 120);
+    reverse();
+  }
+}
+
+void yellowPurpleTurquoise() {
+  for (int i = 0; i < 2; i++) {
+    displayWave(yellow, 120);
+    displayWave(purple, 30);
+    displayWave(yellow, 120);
+    displayWave(black, 30);
+    displayWave(purple, 20);
+    displayWave(turquoise, 120);
+    displayWave(yellow, 120);
+    displayWave(purple, 120);
+    displayWave(black, 120);
+    displayWave(black, 40);
+    displayWave(turquoise, 20);
+    displayWave(purple, 120);
+    displayWave(white, 60);
+    reverse();
+    displayWave(purple, 120);
+    displayWave(turquoise, 20);
+    displayWave(black, 120);
+    displayWave(white, 120);
+    displayWave(purple, 120);
+    displayWave(yellow, 120);
+    displayWave(turquoise, 120);
+    displayWave(black, 120);
+    displayWave(white, 120);
+    displayWave(purple, 120);
+    displayWave(yellow, 120);
+    displayWave(turquoise, 120);
+    displayWave(black, 120);
+    displayWave(white, 120);
+    displayWave(purple, 120);
+    displayWave(yellow, 120);
+    displayWave(turquoise, 120);
+}  
 }
